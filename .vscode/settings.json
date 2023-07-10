@@ -1,0 +1,7 @@
+{
+    "python.formatting.autopep8Path": /Users/kelseylemmer/Library/Python/3.9/bin/autopep8,
+    "python.linting.pylintEnabled": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportGeneralTypeIssues": "none"
+    }
+}
