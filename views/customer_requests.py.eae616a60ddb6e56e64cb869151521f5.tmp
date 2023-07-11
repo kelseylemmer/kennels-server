@@ -1,7 +1,7 @@
-EMPLOYEES = [
+CUSTOMERS = [
     {
         "id": 1,
-        "name": "Jenna Solis"
+        "name": "Ryan Tanay"
     }
 ]
 
