@@ -3,6 +3,7 @@ CUSTOMERS = [
         "id": 1,
         "fullName": "Ryan Tanay",
         "email": "rtanay@gmai.com"
+        "address": "915 Red Street"
     }
 ]
 

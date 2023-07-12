@@ -3,6 +3,7 @@ ANIMALS = [
         "id": 1,
         "name": "Snickers",
         "species": "Dog",
+        "breed": "chihuahua",
         "locationId": 1,
         "customerId": 4,
         "employeeId": 1
@@ -11,6 +12,7 @@ ANIMALS = [
         "id": 2,
         "name": "Roman",
         "species": "Dog",
+        "breed": "dalmatian",
         "locationId": 1,
         "customerId": 2,
         "employeeId": 1
@@ -19,6 +21,7 @@ ANIMALS = [
         "id": 3,
         "name": "Blue",
         "species": "Cat",
+        "breed": "russian blue"
         "locationId": 2,
         "customerId": 1,
         "employeeId": 1
