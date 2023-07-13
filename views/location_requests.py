@@ -11,10 +11,13 @@ LOCATIONS = [
     }
 ]
 
+
 def get_all_locations():
     return LOCATIONS
 
 # Function with a single parameter
+
+
 def get_single_location(id):
     # Variable to hold the found location, if it exists
     requested_location = None
@@ -28,6 +31,7 @@ def get_single_location(id):
             requested_location = location
 
     return requested_location
+
 
 def create_location(location):
     # Get the id value of the last location in the list
@@ -44,3 +48,19 @@ def create_location(location):
 
     # Return the dictionary with `id` property added
     return location
+
+
+def delete_location(id):
+    # Initial -1 value for location index, in case one isn't found
+    location_index = -1
+
+    # Iterate the LOCATIONS list, but use enumerate() so that you
+    # can access the index value of each item
+    for index, location in enumerate(LOCATIONS):
+        if location["id"] == id:
+            # Found the location. Store the current index.
+            location_index = index
+
+    # If the location was found, use pop(int) to remove it from list
+    if location_index >= 0:
+        LOCATIONSS.pop(location_index)

@@ -1,12 +1,16 @@
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from views import get_all_animals, get_single_animal, create_animal, get_all_locations, get_single_location, create_location, get_all_customers, get_single_customer, create_customer, get_all_employees, get_single_employee, create_employee
-
+from views import (get_all_animals, get_single_animal, create_animal, delete_animal,
+                   get_all_locations, get_single_location, create_location, delete_location,
+                   get_all_customers, get_single_customer, create_customer, delete_customer,
+                   get_all_employees, get_single_employee, create_employee, delete_employee)
 
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
 # work together for a common purpose. In this case, that
 # common purpose is to respond to HTTP requests from a client.
+
+
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
         # Just like splitting a string in JavaScript. If the
@@ -105,18 +109,27 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(new_resource).encode())
 
     def do_DELETE(self):
-    # Set a 204 response code
-    self._set_headers(204)
+        # Set a 204 response code
+        self._set_headers(204)
 
-    # Parse the URL
-    (resource, id) = self.parse_url(self.path)
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
 
-    # Delete a single animal from the list
-    if resource == "animals":
-        delete_animal(id)
+        # Delete a single animal from the list
+        if resource == "animals":
+            delete_animal(id)
+        # Delete a single customer from the list
+        if resource == "customers":
+            delete_customer(id)
+        # Delete a single employee from the list
+        if resource == "employees":
+            delete_employee(id)
+        # Delete a single location from the list
+        if resource == "locations":
+            delete_location(id)
 
-    # Encode the new animal and send in response
-    self.wfile.write("".encode())
+        # Encode the new and send in response
+        self.wfile.write("".encode())
 
     # A method that handles any PUT request.
     def do_PUT(self):

@@ -21,7 +21,7 @@ ANIMALS = [
         "id": 3,
         "name": "Blue",
         "species": "Cat",
-        "breed": "russian blue"
+        "breed": "russian blue",
         "locationId": 2,
         "customerId": 1,
         "employeeId": 1
