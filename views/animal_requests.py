@@ -6,50 +6,78 @@ ANIMALS = [
     {
         "id": 1,
         "name": "Snickers",
-        "species": "Dog",
+        "status": "Admitted",
         "breed": "Chihuahua",
-        "locationId": 1,
-        "customerId": 4,
-        "employeeId": 1,
-        "status": "Admitted"
+        "customer_id": 4,
+        "locationId": 1
+
     },
     {
         "id": 2,
         "name": "Roman",
-        "species": "Dog",
+        "status": "Admitted",
         "breed": "Dalmatian",
-        "locationId": 1,
-        "customerId": 2,
-        "employeeId": 1,
-        "status": "Admitted"
+        "customer_id": 2,
+        "locationId": 1
     },
     {
         "id": 3,
         "name": "Blue",
-        "species": "Cat",
+        "status": "Admitted",
         "breed": "Russian Blue",
-        "locationId": 2,
-        "customerId": 1,
-        "employeeId": 1,
-        "status": "Admitted"
+        "customer_id": 1,
+        "locationId": 2
     },
     {
         "id": 4,
         "name": "Eleanor",
-        "species": "Dog",
+        "status": "Admitted",
         "breed": "Italian Greyhound",
-        "locationId": 1,
         "customerId": 2,
-        "employeeId": 1,
-        "status": "Admitted"
+        "locationId": 1
     }
 ]
 
 
 def get_all_animals():
-    return ANIMALS
+    # Open a connection to the database
+    with sqlite3.connect("./kennel.sqlite3") as conn:
 
-# Function with a single parameter
+        # Just use these. It's a Black Box.
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.name,
+            a.status,
+            a.breed,
+            a.customer_id,
+            a.location_id
+        FROM animal a
+        """)
+
+        # Initialize an empty list to hold all animal representations
+        animals = []
+
+        # Convert rows of data into a Python list
+        dataset = db_cursor.fetchall()
+
+        # Iterate list of data returned from database
+        for row in dataset:
+
+            # Create an animal instance from the current row.
+            # Note that the database fields are specified in
+            # exact order of the parameters defined in the
+            # Animal class above.
+            animal = Animal(row['id'], row['name'], row['status'], row['breed'],
+                            row['customer_id'], row['location_id'])
+
+            animals.append(animal.__dict__)
+
+    return animals
 
 
 def get_single_animal(id):
@@ -108,47 +136,3 @@ def update_animal(id, new_animal):
             # Found the animal. Update the value.
             ANIMALS[index] = new_animal
             break
-
-def get_all_animals():
-    # Open a connection to the database
-    with sqlite3.connect("./kennel.sqlite3") as conn:
-
-        # Just use these. It's a Black Box.
-        conn.row_factory = sqlite3.Row
-        db_cursor = conn.cursor()
-
-        # Write the SQL query to get the information you want
-        db_cursor.execute("""
-        SELECT
-            a.id,
-            a.name,
-            a.species,
-            a.breed,
-            a.status,
-            a.locationId,
-            a.customerId,
-            a.employeeId,
-            a.status
-        FROM animal a
-        """)
-
-        # Initialize an empty list to hold all animal representations
-        animals = []
-
-        # Convert rows of data into a Python list
-        dataset = db_cursor.fetchall()
-
-        # Iterate list of data returned from database
-        for row in dataset:
-
-            # Create an animal instance from the current row.
-            # Note that the database fields are specified in
-            # exact order of the parameters defined in the
-            # Animal class above.
-            animal = Animal(row['id'], row['name'], row['breed'],
-                            row['status'], row['location_id'],
-                            row['customer_id'])
-
-            animals.append(animal.__dict__)
-
-    return animals
