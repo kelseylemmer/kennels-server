@@ -1,7 +1,8 @@
 import json
+from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from views import (get_all_animals, get_single_animal, create_animal, delete_animal, update_animal,
-                   get_all_customers, get_single_customer, create_customer, delete_customer, update_customer,
+                   get_all_customers, get_single_customer, get_customer_by_email, create_customer, delete_customer, update_customer,
                    get_all_employees, get_single_employee, create_employee, delete_employee, update_employee,
                    get_all_locations, get_single_location, create_location, delete_location, update_location)
 
@@ -12,30 +13,23 @@ from views import (get_all_animals, get_single_animal, create_animal, delete_ani
 
 
 class HandleRequests(BaseHTTPRequestHandler):
+    # replace the parse_url function in the class
     def parse_url(self, path):
-        # Just like splitting a string in JavaScript. If the
-        # path is "/animals/1", the resulting list will
-        # have "" at index 0, "animals" at index 1, and "1"
-        # at index 2.
-        path_params = path.split("/")
+        """Parse the url into the resource and id"""
+        parsed_url = urlparse(path)
+        path_params = parsed_url.path.split('/')  # ['', 'animals', 1]
         resource = path_params[1]
-        id = None
 
-        # Try to get the item at index 2
+        if parsed_url.query:
+            query = parse_qs(parsed_url.query)
+            return (resource, query)
+
+        pk = None
         try:
-            # Convert the string "1" to the integer 1
-            # This is the new parseInt()
-            id = int(path_params[2])
-        except IndexError:
-            pass  # No route parameter exists: /animals
-        except ValueError:
-            pass  # Request had trailing slash: /animals/
-
-        return (resource, id)  # This is a tuple
-    # This is a Docstring it should be at the beginning of all classes and functions
-    # It gives a description of the class or function
-    """Controls the functionality of any GET, PUT, POST, DELETE requests to the server
-    """
+            pk = int(path_params[2])
+        except (IndexError, ValueError):
+            pass
+        return (resource, pk)
 
     # Here's a class function
 
@@ -45,36 +39,40 @@ class HandleRequests(BaseHTTPRequestHandler):
         self._set_headers(200)
         response = {}  # Default response
 
-        # Parse the URL and capture the tuple that is returned
-        (resource, id) = self.parse_url(self.path)
+        # Parse URL and store entire tuple in a variable
+        parsed = self.parse_url(self.path)
 
-        if resource == "animals":
-            if id is not None:
-                response = get_single_animal(id)
+        # If the path does not include a query parameter, continue with the original if block
+        if '?' not in self.path:
+            (resource, id) = parsed
 
-            else:
-                response = get_all_animals()
+            if resource == "animals":
+                if id is not None:
+                    response = get_single_animal(id)
+                else:
+                    response = get_all_animals()
+            if resource == "locations":
+                if id is not None:
+                    response = get_single_location(id)
+                else:
+                    response = get_all_locations()
+            if resource == "customers":
+                if id is not None:
+                    response = get_single_customer(id)
+                else:
+                    response = get_all_customers()
+            if resource == "employees":
+                if id is not None:
+                    response = get_single_employee(id)
+                else:
+                    response = get_all_employees()
 
-        if resource == "locations":
-            if id is not None:
-                response = get_single_location(id)
+        else:  # There is a ? in the path, run the query param functions
+            (resource, query) = parsed
 
-            else:
-                response = get_all_locations()
-
-        if resource == "customers":
-            if id is not None:
-                response = get_single_customer(id)
-
-            else:
-                response = get_all_customers()
-
-        if resource == "employees":
-            if id is not None:
-                response = get_single_employee(id)
-
-            else:
-                response = get_all_employees()
+            # see if the query dictionary has an email key
+            if query.get('email') and resource == 'customers':
+                response = get_customer_by_email(query['email'][0])
 
         self.wfile.write(json.dumps(response).encode())
 
