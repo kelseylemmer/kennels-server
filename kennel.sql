@@ -79,3 +79,11 @@ SELECT
 		c.password
 FROM customer c
 WHERE c.id = 1
+
+SELECT
+    e.id,
+    e.name,
+    e.address,
+    e.location_id            
+FROM employee e 
+WHERE e.id = 1
