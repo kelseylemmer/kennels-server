@@ -7,8 +7,8 @@ CREATE TABLE `Location` (
 CREATE TABLE `Customer` (
     `id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     `name`    TEXT NOT NULL,
+		`email`    TEXT NOT NULL,
     `address`    TEXT NOT NULL,
-    `email`    TEXT NOT NULL,
     `password`    TEXT NOT NULL
 );
 
@@ -70,3 +70,12 @@ SELECT
     a.customer_id
 FROM animal a
 WHERE a.id = 3
+
+SELECT
+    c.id,
+    c.name,
+    c.email,
+    c.address,
+		c.password
+FROM customer c
+WHERE c.id = 1
