@@ -3,7 +3,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from views import (get_all_animals, get_single_animal, create_animal, delete_animal, update_animal,
                    get_all_customers, get_single_customer, get_customer_by_email, create_customer, delete_customer, update_customer,
-                   get_all_employees, get_single_employee, create_employee, delete_employee, update_employee,
+                   get_all_employees, get_single_employee, get_employee_by_location, create_employee, delete_employee, update_employee,
                    get_all_locations, get_single_location, create_location, delete_location, update_location)
 
 # Here's a class. It inherits from another class.
@@ -73,6 +73,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             # see if the query dictionary has an email key
             if query.get('email') and resource == 'customers':
                 response = get_customer_by_email(query['email'][0])
+            if query.get('location_id') and resource == 'employees':
+                response = get_employee_by_location(query['location_id'][0])
 
         self.wfile.write(json.dumps(response).encode())
 
