@@ -7,7 +7,7 @@ CREATE TABLE `Location` (
 CREATE TABLE `Customer` (
     `id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     `name`    TEXT NOT NULL,
-		`email`    TEXT NOT NULL,
+	`email`    TEXT NOT NULL,
     `address`    TEXT NOT NULL,
     `password`    TEXT NOT NULL
 );
@@ -87,3 +87,10 @@ SELECT
     e.location_id            
 FROM employee e 
 WHERE e.id = 1
+
+SELECT
+    l.id,
+    l.name,
+    l.address
+FROM location l
+WHERE l.id = 1
