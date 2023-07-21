@@ -81,18 +81,33 @@ def get_all_animals():
 
 
 def get_single_animal(id):
-    # Variable to hold the found animal, if it exists
-    requested_animal = None
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
 
-    # Iterate the ANIMALS list above. Very similar to the
-    # for..of loops you used in JavaScript.
-    for animal in ANIMALS:
-        # Dictionaries in Python use [] notation to find a key
-        # instead of the dot notation that JavaScript used.
-        if animal["id"] == id:
-            requested_animal = animal
+        # Use a ? parameter to inject a variable's value
+        # into the SQL statement.
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.name,
+            a.status,
+            a.breed,
+            a.customer_id,
+            a.location_id
+        FROM animal a
+        WHERE a.id = ?
+        """, (id, ))
 
-    return requested_animal
+        # Load the single result into memory
+        data = db_cursor.fetchone()
+
+        # Create an animal instance from the current row
+        animal = Animal(data['id'], data['name'], data['breed'], data['status'],
+                        data['customer_id'], data['location_id'],
+                        )
+
+        return animal.__dict__
 
 
 def create_animal(animal):
