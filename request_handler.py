@@ -148,6 +148,12 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource == "animals":
             success = update_animal(id, post_body)
+        if resource == "customers":
+            success = update_customer(id, post_body)
+        if resource == "employees":
+            success = update_employee(id, post_body)
+        if resource == "locations":
+            success = update_location(id, post_body)
         # rest of the elif's
 
         if success:
