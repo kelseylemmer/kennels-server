@@ -10,3 +10,5 @@ class Animal():
         self.breed = breed
         self.customer_id = customer_id
         self.location_id = location_id
+        self.location = None
+        self.customer = None
