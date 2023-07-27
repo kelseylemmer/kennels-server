@@ -175,16 +175,28 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-    # Another method! This supports requests with the OPTIONS verb.
+    # sets up a basic HTTP server that listens on port 8088.
+    # The server handles HTTP OPTIONS requests and responds with the appropriate headers
+    # for CORS support, allowing requests from any domain and specifying allowed methods
+    # and headers. The server will run indefinitely, listening for incoming requests until it is manually stopped.
     def do_OPTIONS(self):
         """Sets the options headers
         """
         self.send_response(200)
+        # This header specifies which origins are allowed to access the server's resources.
+        # In this case, the * wildcard means that any origin is allowed
+        # (i.e., the server allows requests from any domain).
         self.send_header('Access-Control-Allow-Origin', '*')
+        # This header indicates which HTTP methods are allowed for the resource.
+        # The server is allowing GET, POST, PUT, and DELETE requests.
         self.send_header('Access-Control-Allow-Methods',
                          'GET, POST, PUT, DELETE')
+        # This header specifies which request headers can be used during the actual request.
+        # The server allows the 'X-Requested-With', 'Content-Type', and 'Accept' headers.
         self.send_header('Access-Control-Allow-Headers',
                          'X-Requested-With, Content-Type, Accept')
+        # This line ends the response headers and sends an empty line,
+        # indicating that the response headers are complete.
         self.end_headers()
 
 
@@ -195,8 +207,13 @@ def main():
     """
     host = ''
     port = 8088
+    # This line creates an instance of the HTTPServer class, specifying the host and port number
+    # (in this case, an empty host and port 8088).
+    # The HandleRequests class is used as the request handler, indicating that it will handle incoming HTTP requests.
     HTTPServer((host, port), HandleRequests).serve_forever()
 
 
+# This block ensures that if the script is executed directly (not imported as a module),
+# it calls the main() function, starting the server.
 if __name__ == "__main__":
     main()
